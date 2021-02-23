@@ -3,6 +3,7 @@ import grpc
 import random
 from config import DBConstants
 from asyncpg.exceptions import UniqueViolationError
+from sqlalchemy import and_
 
 
 class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
@@ -67,8 +68,8 @@ class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
         """
         from models.items import Items
         self.print_request(request, context)
-        change_val = await Items.update.values(sale_price=request.sale_price).where(Items.id == request.id and
-                                                                       Items.seller_id == request.seller_id).\
+        change_val = await Items.update.values(sale_price=request.sale_price).where(and_(Items.id == request.id,
+                                                                       Items.seller_id == request.seller_id)).\
             gino.status()
         if change_val[0] == DBConstants.Successful_update:
             return items_pb2.ChangeItemResponse(id=request.id)
@@ -108,7 +109,8 @@ class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
         from models.items import Items
         self.print_request(request, context)
         try:
-            item = await Items.query.where(Items.id == request.id and Items.seller_id == request.seller_id).gino.first()
+            item = await Items.query.where(and_(Items.id == request.id,
+                                                Items.seller_id == request.seller_id)).gino.first()
             diff = item.quantity - request.quantity
             if diff > 0:
                 await item.update(quantity=diff).apply()
@@ -152,8 +154,8 @@ class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
         """
         from models.sellers import Sellers
         self.print_request(request, context)
-        seller = await Sellers.query.where(Sellers.user_name == request.user_name
-                                           and Sellers.password == request.password).gino.first()
+        seller = await Sellers.query.where(and_(Sellers.user_name == request.user_name,
+                                                Sellers.password == request.password)).gino.first()
         if seller:
             return items_pb2.LoginResponse(seller_id=seller.id)
         else:
