@@ -14,7 +14,7 @@ def parse_params(request):
     return params
 
 
-# async def get_item_handler(request):
+# async def search_items_handler(request):
 #     params = parse_params(request)
 #     id = int(params[0].split('=')[1])
 #     async with grpc.aio.insecure_channel('localhost:5001') as channel:
@@ -137,7 +137,7 @@ async def get_seller_rating_handler(request):
     buyer_request = json.loads(await request.text())
     async with grpc.aio.insecure_channel('localhost:5001') as channel:
         stub = buyer_pb2_grpc.BuyerMasterStub(channel)
-        response = await stub.GetSellerRating(buyer_pb2.GetSellerRatingRequest(seller_id=item.get('seller_id')))
+        response = await stub.GetSellerRating(buyer_pb2.GetSellerRatingRequest(seller_id=buyer_request.get('seller_id')))
     
     get_seller_rating_resp = {'rating': response.rating}
     return web.Response(text=json.dumps(get_seller_rating_resp))
@@ -162,7 +162,7 @@ async def get_buyer_history_handler(request):
 
 
 app = web.Application()
-# app.router.add_get('/get_item', get_item_handler)
+# app.router.add_get('/search_items', search_items_handler)
 app.router.add_post('/add_to_cart', add_to_cart_handler)
 app.router.add_post('/remove_item', remove_item_handler)
 app.router.add_post('/clear_cart', clear_cart_handler)
