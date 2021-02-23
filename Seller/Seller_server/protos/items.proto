@@ -44,6 +44,7 @@ message GetItemResponse {
   Item item = 1;
 }
 
+// Requests
 message AddItemRequest {
   Item item = 1;
 }
@@ -60,11 +61,9 @@ message RemoveItemRequest {
   float quantity = 3;
 }
 
-
 message DisplayItemRequest {
   int64 seller_id = 1;
 }
-
 
 message CreateAccountRequest {
   string name = 1;
@@ -85,6 +84,7 @@ message GetSellerRatingRequest {
   int64 seller_id = 1;
 }
 
+// Responses
 message AddItemResponse {
   int64 id = 1;
 }
@@ -96,7 +96,6 @@ message ChangeItemResponse {
 message RemoveItemResponse {
   int64 id = 1;
 }
-
 
 message DisplayItemResponse {
   repeated DisplayItem items = 1;
@@ -117,4 +116,3 @@ message LogoutResponse {
 message GetSellerRatingResponse {
   int64 rating = 1;
 }
-

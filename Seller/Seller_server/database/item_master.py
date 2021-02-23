@@ -114,12 +114,12 @@ class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
                 await item.update(quantity=diff).apply()
             elif diff == 0:
                 await item.delete()
-            return items_pb2.ChangeItemResponse(id=request.id)
+            return items_pb2.RemoveItemResponse(id=request.id)
 
         except Exception:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details('Item quantity removal unsuccessful')
-            return items_pb2.ChangeItemResponse()
+            return items_pb2.RemoveItemResponse()
 
     async def CreateAccount(self, request, context):
         """Remove item quantity
