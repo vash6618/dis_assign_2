@@ -69,14 +69,15 @@ async def display_cart_handler(request):
     cart_items = response.items
     cart_list = []
     for item in cart_items:
-        cart_list.append({'buyer_id':item.buyer_id, 'item_id':item.item_id, 
-                          'quantity':item.quantity,'name': item.name, 'category': item.category, 
+        cart_list.append({'buyer_id': item.buyer_id, 'item_id':item.item_id,
+                          'quantity': item.quantity,'name': item.name, 'category': item.category,
                           'condition': item.condition, 'keywords': list(item.keywords), 
                           'sale_price': item.sale_price, 'seller_id': item.seller_id,
-                          'updated_at': Timestamp().ToDatetime(item.updated_at).isoformat()})
+                          'updated_at': item.updated_at.ToDatetime().isoformat()})
 
     display_cart_resp = {'items': cart_list}
     return web.Response(text=json.dumps(display_cart_resp))
+
 
 async def create_account_handler(request):
     buyer_request = json.loads(await request.text())
@@ -107,6 +108,7 @@ async def logout_handler(request):
     logout_resp = {'buyer_id': 0}
     return web.Response(text=json.dumps(logout_resp))
 
+
 async def make_purchase_handler(request):
     buyer_request = json.loads(await request.text())
     async with grpc.aio.insecure_channel('localhost:5001') as channel:
@@ -133,6 +135,7 @@ async def make_purchase_handler(request):
 #     display_cart_resp = {'items': cart_list}
 #     return web.Response(text=json.dumps(display_cart_resp))
 
+
 async def get_seller_rating_handler(request):
     buyer_request = json.loads(await request.text())
     async with grpc.aio.insecure_channel('localhost:5001') as channel:
@@ -142,6 +145,7 @@ async def get_seller_rating_handler(request):
     get_seller_rating_resp = {'rating': response.rating}
     return web.Response(text=json.dumps(get_seller_rating_resp))
 
+
 async def get_buyer_history_handler(request):
     buyer_request = json.loads(await request.text())
     async with grpc.aio.insecure_channel('localhost:5001') as channel:
@@ -150,12 +154,11 @@ async def get_buyer_history_handler(request):
     cart_items = response.items
     cart_list = []
     for item in cart_items:
-        print("***", Timestamp().ToDatetime(item.updated_at))
         cart_list.append({'buyer_id':item.buyer_id, 'item_id':item.item_id, 
                           'quantity':item.quantity,'name': item.name, 'category': item.category, 
                           'condition': item.condition, 'keywords': list(item.keywords), 
                           'sale_price': item.sale_price, 'seller_id': item.seller_id, 
-                          'seller_review': item.seller_review, 'updated_at': Timestamp().ToDatetime(item.updated_at).isoformat()})
+                          'seller_review': item.seller_review, 'updated_at':item.updated_at.ToDatetime().isoformat()})
 
     purchase_history_resp = {'items': cart_list}
     return web.Response(text=json.dumps(purchase_history_resp))

@@ -4,6 +4,7 @@ import random
 from config import DBConstants
 from asyncpg.exceptions import UniqueViolationError
 from google.protobuf.timestamp_pb2 import Timestamp
+from sqlalchemy import and_
 
 class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
     """Implements ItemMaster protobuf service interface."""
@@ -52,9 +53,10 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
                 context.set_details('Not enough Item quantity present')
             return buyer_pb2.AddToCartResponse()
         
-        buyer_cart_exist = await BuyerCart.query.where(BuyerCart.item_id == request.item_id 
-                                            and BuyerCart.buyer_id == request.buyer_id
-                                            and BuyerCart.checked_out == False).gino.first()
+        buyer_cart_exist = await BuyerCart.query.where(and_(BuyerCart.item_id == request.item_id,
+                                                            BuyerCart.buyer_id == request.buyer_id,
+                                                            BuyerCart.checked_out == False)).gino.first()
+        print(buyer_cart_exist)
         if buyer_cart_exist:
             add_q = buyer_cart_exist.quantity + request.quantity
             if add_q > item.quantity:
@@ -83,9 +85,9 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         """
         from models.buyer_cart import BuyerCart
         self.print_request(request, context)
-        buyer_cart_exist = await BuyerCart.query.where(BuyerCart.item_id == request.item_id 
-                                            and BuyerCart.buyer_id == request.buyer_id
-                                            and BuyerCart.checked_out == False).gino.first()
+        buyer_cart_exist = await BuyerCart.query.where(and_(BuyerCart.item_id == request.item_id,
+                                                            BuyerCart.buyer_id == request.buyer_id,
+                                                            BuyerCart.checked_out == False)).gino.first()
         if buyer_cart_exist:
             diff = buyer_cart_exist.quantity - request.quantity
             if buyer_cart_exist.quantity > request.quantity:
@@ -111,9 +113,8 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         from models.buyer_cart import BuyerCart
         self.print_request(request, context)
         try:
-            await BuyerCart.delete.where(
-                BuyerCart.buyer_id == request.buyer_id and
-                BuyerCart.checked_out == False).gino.status()
+            await BuyerCart.delete.where(and_(BuyerCart.buyer_id == request.buyer_id,
+                                              BuyerCart.checked_out == False)).gino.status()
             return buyer_pb2.ClearCartResponse(buyer_id=request.buyer_id)
         except Exception:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -129,20 +130,20 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         from models.buyer_cart import BuyerCart
         from models.items import Items
         self.print_request(request, context)
-        buyer_cart = await BuyerCart.query.where(
-                BuyerCart.buyer_id == request.buyer_id and
-                BuyerCart.checked_out == False).gino.all()        
+        buyer_cart = await BuyerCart.query.where(and_(BuyerCart.buyer_id == request.buyer_id,
+                                                      BuyerCart.checked_out == False)).gino.all()
         if buyer_cart:
             display_resp = []
             for cart_item in buyer_cart:
-                print(Timestamp().FromDatetime(cart_item.updated_at))
+                ts = Timestamp()
+                ts.FromDatetime(cart_item.updated_at)
                 item = await Items.query.where(Items.id == cart_item.item_id).gino.first()
                 display_resp.append(buyer_pb2.DisplayItemsInCart(
                     buyer_id=cart_item.buyer_id, item_id=cart_item.item_id, 
                     quantity=cart_item.quantity, name=item.name, category=item.category,
                     condition=item.condition, keywords=item.keywords,
                     sale_price=item.sale_price, seller_id=item.seller_id, 
-                    updated_at=Timestamp().FromDatetime(cart_item.updated_at)))
+                    updated_at=ts))
             return buyer_pb2.DisplayCartResponse(items=display_resp)
         else:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -180,8 +181,8 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         """
         from models.buyers import Buyers
         self.print_request(request, context)
-        buyer = await Buyers.query.where(Buyers.user_name == request.user_name and
-                                         Buyers.password == request.password).gino.first()
+        buyer = await Buyers.query.where(and_(Buyers.user_name == request.user_name,
+                                              Buyers.password == request.password)).gino.first()
         if buyer:
             return buyer_pb2.LoginResponse(buyer_id=buyer.id)
         else:
@@ -202,9 +203,8 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         # send name, number, exp
 
         self.print_request(request, context)
-        buyer_cart = await BuyerCart.query.where(
-                BuyerCart.buyer_id == request.buyer_id and
-                BuyerCart.checked_out == True).gino.all() 
+        buyer_cart = await BuyerCart.query.where(and_(BuyerCart.buyer_id == request.buyer_id,
+                                                      BuyerCart.checked_out == True)).gino.all()
         if buyer_cart:
             # get item entry for each item in cart
             # check quantity, proceed only if enough quantity available in Item db
@@ -268,25 +268,20 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         from models.buyer_cart import BuyerCart
         from models.items import Items
         self.print_request(request, context)
-        buyer_cart = await BuyerCart.query.where(
-                BuyerCart.buyer_id == request.buyer_id and
-                BuyerCart.checked_out == True).gino.all()    
+        buyer_cart = await BuyerCart.query.where(and_(BuyerCart.buyer_id == request.buyer_id,
+                                                      BuyerCart.checked_out == True)).gino.all()
         if buyer_cart:
             display_resp = []
             for cart_item in buyer_cart:
-                print("***", cart_item)
-                print("***", cart_item.updated_at, type(cart_item.updated_at))
                 ts = Timestamp()
-                print("***", ts.FromDatetime(cart_item.updated_at))
-
-
+                ts.FromDatetime(cart_item.updated_at)
                 item = await Items.query.where(Items.id == cart_item.item_id).gino.first()
                 display_resp.append(buyer_pb2.PurchaseHistory(
                     buyer_id=cart_item.buyer_id, item_id=cart_item.item_id, 
                     quantity=cart_item.quantity, name=item.name, category=item.category,
                     condition=item.condition, keywords=item.keywords,
                     sale_price=item.sale_price, seller_id=item.seller_id, 
-                    seller_review=cart_item.seller_review.name, updated_at=Timestamp().FromDatetime(cart_item.updated_at)))
+                    seller_review=cart_item.seller_review.name, updated_at=ts))
             return buyer_pb2.GetBuyerHistoryResponse(items=display_resp)
         else:
             context.set_code(grpc.StatusCode.NOT_FOUND)
