@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service BuyerMaster {
+  // Get an item by id.
+  rpc SearchItemCart (SearchItemCartRequest) returns (SearchItemCartResponse) {}
+  rpc AddToCart (AddToCartRequest) returns (AddToCartResponse) {}
+  rpc RemoveItemFromShoppingCart (RemoveItemFromShoppingCartRequest) returns (RemoveItemFromShoppingCartResponse) {}
+  rpc ClearCart (ClearCartRequest) returns (ClearCartResponse) {}
+  rpc DisplayCart (DisplayCartRequest) returns (DisplayCartResponse) {}
+  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {}
+  rpc Login (LoginRequest) returns (LoginResponse) {}
+  rpc Logout (LogoutRequest) returns (LogoutResponse) {}
+  rpc MakePurchase (MakePurchaseRequest) returns (MakePurchaseResponse) {}
+  rpc ProvideFeedback (ProvideFeedbackRequest) returns (ProvideFeedbackResponse) {}
+  rpc GetSellerRating (GetSellerRatingRequest) returns (GetSellerRatingResponse) {}
+  rpc GetBuyerHistory (GetBuyerHistoryRequest) returns (GetBuyerHistoryResponse) {}
+}
+
+message Item {
+  string name = 1;
+  int32 category = 2;
+  int64 id = 3;
+  bool condition = 4;
+  repeated string keywords = 5;
+  float sale_price = 6;
+  int32 quantity = 7;
+  int64 seller_id = 8;
+}
+
+message DisplayItemsInCart {
+  int64 buyer_id = 1;
+  int64 item_id = 2;
+  int32 quantity = 3;
+  
+  string name = 4;
+  int32 category = 5;
+  bool condition = 6;
+  repeated string keywords = 7;
+  float sale_price = 8;
+  int64 seller_id = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+message PurchaseHistory {
+  int64 buyer_id = 1;
+  int64 item_id = 2;
+  int32 quantity = 3;
+  
+  string name = 4;
+  int32 category = 5;
+  bool condition = 6;
+  repeated string keywords = 7;
+  float sale_price = 8;
+  int64 seller_id = 9;
+  string seller_review = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+// Requests
+message SearchItemCartRequest {
+  int64 buyer_id = 1;
+  int32 category = 2;
+  repeated string keywords = 3;
+}
+
+message AddToCartRequest {
+  int64 buyer_id = 1;
+  int64 item_id = 2;
+  int32 quantity = 3;
+}
+
+message RemoveItemFromShoppingCartRequest {
+  int64 buyer_id = 1;
+  int64 item_id = 2;
+  int32 quantity = 3;
+}
+
+message ClearCartRequest {
+  int64 buyer_id = 1;
+}
+
+message DisplayCartRequest {
+  int64 buyer_id = 1;
+}
+
+message CreateAccountRequest {
+  string name = 1;
+  string user_name = 2;
+  string password = 3;
+}
+
+message LoginRequest {
+  string user_name = 1;
+  string password = 2;
+}
+
+message LogoutRequest {
+  int64 buyer_id = 1;
+}
+
+message MakePurchaseRequest {
+  int64 buyer_id = 1;
+  // credit card - name
+  // number
+  // exp
+}
+
+message ProvideFeedbackRequest {
+  int64 buyer_id = 1;
+  int64 item_id = 2;
+  // check logic: see if we need to provide list to buyer 
+  // from purchase history or give an option to rate an item
+}
+
+message GetSellerRatingRequest {
+  int64 seller_id = 1;
+}
+
+message GetBuyerHistoryRequest {
+  int64 buyer_id = 1;
+}
+
+// Responses
+message SearchItemCartResponse {
+  repeated Item items = 1;
+}
+
+message AddToCartResponse {
+  int64 buyer_id = 1;
+}
+
+message RemoveItemFromShoppingCartResponse {
+  int64 buyer_id = 1;
+}
+
+message ClearCartResponse {
+  int64 buyer_id = 1;
+}
+
+message DisplayCartResponse {
+  repeated DisplayItemsInCart items = 1;
+}
+
+message CreateAccountResponse {
+  int64 buyer_id = 1;
+}
+
+message LoginResponse {
+  int64 buyer_id = 1;
+}
+
+message LogoutResponse {
+  int64 buyer_id = 1;
+}
+
+message MakePurchaseResponse {
+  int64 buyer_id = 1;
+  bool transaction_status = 2;
+}
+
+message ProvideFeedbackResponse {
+  int64 buyer_id = 1;
+}
+
+message GetSellerRatingResponse {
+  int64 seller_rating = 1;
+}
+
+message GetBuyerHistoryResponse {
+  repeated PurchaseHistory items = 1;
+}

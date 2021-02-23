@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+service ItemMaster {
+  // Get an item by id.
+  rpc GetItem (GetItemRequest) returns (GetItemResponse) {}
+  rpc AddItem (AddItemRequest) returns (AddItemResponse) {}
+  rpc ChangeItem (ChangeItemRequest) returns (ChangeItemResponse) {}
+  rpc RemoveItem (RemoveItemRequest) returns (RemoveItemResponse) {}
+  rpc DisplayItem (DisplayItemRequest) returns (DisplayItemResponse) {}
+  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountResponse) {}
+  rpc Login (LoginRequest) returns (LoginResponse) {}
+  rpc Logout (LogoutRequest) returns (LogoutResponse) {}
+  rpc GetSellerRating (GetSellerRatingRequest) returns (GetSellerRatingResponse) {}
+}
+
+message Item {
+  string name = 1;
+  int32 category = 2;
+  bool condition = 4;
+  repeated string keywords = 5;
+  float sale_price = 6;
+  int32 quantity = 7;
+  int64 seller_id = 8;
+}
+
+message DisplayItem {
+  string name = 1;
+  int32 category = 2;
+  int64 id = 3;
+  bool condition = 4;
+  repeated string keywords = 5;
+  float sale_price = 6;
+  int32 quantity = 7;
+  int64 seller_id = 8;
+}
+
+// The request message for [ItemMaster.GetItem].
+message GetItemRequest {
+  int64 id = 1;
+}
+
+// The response message for [ItemMaster.GetItem].
+message GetItemResponse {
+  Item item = 1;
+}
+
+message AddItemRequest {
+  Item item = 1;
+}
+
+message ChangeItemRequest {
+  int64 id = 1;
+  int64 seller_id = 2;
+  float sale_price = 3;
+}
+
+message RemoveItemRequest {
+  int64 id = 1;
+  int64 seller_id = 2;
+  float quantity = 3;
+}
+
+
+message DisplayItemRequest {
+  int64 seller_id = 1;
+}
+
+
+message CreateAccountRequest {
+  string name = 1;
+  string user_name = 2;
+  string password = 3;
+}
+
+message LoginRequest {
+  string user_name = 1;
+  string password = 2;
+}
+
+message LogoutRequest {
+  int64 seller_id = 1;
+}
+
+message GetSellerRatingRequest {
+  int64 seller_id = 1;
+}
+
+message AddItemResponse {
+  int64 id = 1;
+}
+
+message ChangeItemResponse {
+  int64 id = 1;
+}
+
+message RemoveItemResponse {
+  int64 id = 1;
+}
+
+
+message DisplayItemResponse {
+  repeated DisplayItem items = 1;
+}
+
+message CreateAccountResponse {
+  int64 seller_id = 1;
+}
+
+message LoginResponse {
+  int64 seller_id = 1;
+}
+
+message LogoutResponse {
+  int64 seller_id = 1;
+}
+
+message GetSellerRatingResponse {
+  int64 rating = 1;
+}
+
