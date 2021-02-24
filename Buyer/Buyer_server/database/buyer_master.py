@@ -6,6 +6,8 @@ from asyncpg.exceptions import UniqueViolationError
 from google.protobuf.timestamp_pb2 import Timestamp
 from sqlalchemy import and_
 
+
+
 class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
     """Implements ItemMaster protobuf service interface."""
     def print_request(self, request, context):
@@ -17,22 +19,52 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
     def generate_rand_id():
         return random.randint(1, pow(2, 63) - 1)
 
-    # async def SearchItemCart(self, request, context):
-    #     """Add an item to the database.
-    #     Args:
-    #         request: The request value for the RPC.
-    #         context (grpc.ServicerContext)
-    #     """
-    #     from models.buyer_cart import BuyerCart
-    #     self.print_request(request, context)
-    #     buyer_cart = await BuyerCart.create(buyer_id=request.nuyer_id, item_id=request.item_id, quantity=request.quantity, checked_out=False)
-    #     print(buyer_cart)
-    #     if buyer_cart:
-    #         return buyer_pb2.AddItemResponse(id=buyer_cart)
-    #     else:
-    #         context.set_code(grpc.StatusCode.NOT_FOUND)
-    #         context.set_details('Item addition unsuccessful')
-    #         return buyer_pb2.AddItemResponse()
+    @staticmethod
+    def row2dict(row):
+        d = {}
+        for column in row.__table__.columns:
+            d[column.name] = str(getattr(row, column.name))
+
+        return d
+
+    async def SearchItemCart(self, request, context):
+        """search items from the database.
+        Args:
+            request: The request value for the RPC.
+            context (grpc.ServicerContext)
+        """
+        from models.buyer_cart import BuyerCart
+        from models.items import Items
+        from database import db_product as db
+        self.print_request(request, context)
+        keywords = request.keywords
+        item_dict = {}
+        for keyword in keywords:
+            items = await db.status(db.text
+                                    ('select * from items where category = :category and :keyword = any(keywords)'),
+                                    {'category': request.category, 'keyword': keyword})
+            print(items)
+            for item in items[1]:
+                # id is at index 2
+                new_item = (item[0], item[1], item[2], item[3], item[4], float(item[5]), item[6], item[7])
+                print((type(item[0]), type(item[1]), type(item[2]), type(item[3]), type(item[4]), type(item[5]),
+                       type(item[6]), type(item[7])))
+                item_dict[item[2]] = new_item
+        print(item_dict)
+        if item_dict:
+            search_resp = []
+            for key in item_dict:
+                item = item_dict[key]
+                search_resp.append(buyer_pb2.Item(
+                    name=item[0], category=item[1], id = item[2],
+                    condition=item[3], keywords=item[4],
+                    sale_price=item[5], seller_id=item[6],
+                    quantity=item[7]))
+            return buyer_pb2.SearchItemCartResponse(items=search_resp)
+        else:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No items found for this query')
+            return buyer_pb2.SearchItemCartResponse()
 
     async def AddToCart(self, request, context):
         """Add item to cart.

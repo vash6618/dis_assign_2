@@ -14,18 +14,22 @@ def parse_params(request):
     return params
 
 
-# async def search_items_handler(request):
-#     params = parse_params(request)
-#     id = int(params[0].split('=')[1])
-#     async with grpc.aio.insecure_channel('localhost:5001') as channel:
-#         stub = buyer_pb2_grpc.BuyerMasterStub(channel)
-#         response = await stub.GetItem(buyer_pb2.GetItemRequest(id=id))
-#     buyer_request = response.item
-#     dict_resp = {'name': item.name, 'category': item.category, 'condition': item.condition,
-#                  'keywords': list(item.keywords), 'sale_price': item.sale_price, 'quantity': item.quantity,
-#                  'seller_id': item.seller_id}
-#     print(dict_resp)
-#     return web.Response(text=json.dumps(dict_resp))
+async def search_items_handler(request):
+    buyer_request = json.loads(await request.text())
+    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+        stub = buyer_pb2_grpc.BuyerMasterStub(channel)
+        response = await stub.SearchItemCart(buyer_pb2.SearchItemCartRequest(buyer_id=buyer_request.get('buyer_id'),
+                                                                             category=buyer_request.get('category'),
+                                                                             keywords=buyer_request.get('keywords')))
+    resp = response.items
+    search_resp = []
+    for item in resp:
+        search_resp.append({'name': item.name, 'category': item.category, 'condition': item.condition,
+                            'item_id': item.id,
+                            'keywords': list(item.keywords), 'sale_price': item.sale_price,
+                            'quantity': item.quantity, 'seller_id': item.seller_id})
+    return web.Response(text=json.dumps(search_resp))
+
 
 async def add_to_cart_handler(request):
     buyer_request = json.loads(await request.text())
@@ -165,7 +169,7 @@ async def get_buyer_history_handler(request):
 
 
 app = web.Application()
-# app.router.add_get('/search_items', search_items_handler)
+app.router.add_post('/search_items', search_items_handler)
 app.router.add_post('/add_to_cart', add_to_cart_handler)
 app.router.add_post('/remove_item', remove_item_handler)
 app.router.add_post('/clear_cart', clear_cart_handler)
