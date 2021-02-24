@@ -2,8 +2,8 @@ from database import db_customer as db
 from enum import Enum
 
 class review_type(Enum):
-    thumbs_up = 1
-    thumbs_down = 2
+    UP = 1
+    DOWN = 2
     NA = 3
 
 class Buyers(db.Model):

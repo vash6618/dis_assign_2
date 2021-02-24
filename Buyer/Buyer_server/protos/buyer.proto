@@ -110,8 +110,7 @@ message MakePurchaseRequest {
 message ProvideFeedbackRequest {
   int64 buyer_id = 1;
   int64 item_id = 2;
-  // check logic: see if we need to provide list to buyer 
-  // from purchase history or give an option to rate an item
+  bool feedback = 3;
 }
 
 message GetSellerRatingRequest {
