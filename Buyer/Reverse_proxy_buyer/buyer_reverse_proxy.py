@@ -39,6 +39,7 @@ async def add_to_cart_handler(request):
                                 buyer_id=buyer_request.get('buyer_id'),
                                 item_id=buyer_request.get('item_id'),
                                 quantity=buyer_request.get('quantity')))
+    
     add_to_cart_resp = {'buyer_id': response.buyer_id}
     return web.Response(text=json.dumps(add_to_cart_resp))
 
@@ -51,6 +52,7 @@ async def remove_item_handler(request):
                                 buyer_id=buyer_request.get('buyer_id'),
                                 item_id=buyer_request.get('item_id'),
                                 quantity=buyer_request.get('quantity')))
+    
     remove_item_resp = {'buyer_id': response.buyer_id}
     return web.Response(text=json.dumps(remove_item_resp))
 
@@ -91,8 +93,8 @@ async def create_account_handler(request):
                                 name=buyer_request.get('name'),
                                 user_name=buyer_request.get('user_name'),
                                 password=buyer_request.get('password')))
+    
     create_account_resp = {'buyer_id': response.buyer_id}
-
     return web.Response(text=json.dumps(create_account_resp))
 
 
@@ -123,21 +125,16 @@ async def make_purchase_handler(request):
     make_purchase_resp = {'buyer_id': response.buyer_id, 'transaction_status': response.transaction_status}
     return web.Response(text=json.dumps(make_purchase_resp))
 
-# async def provide_feedback(request):
-#     buyer_request = json.loads(await request.text())
-#     async with grpc.aio.insecure_channel('localhost:5001') as channel:
-#         stub = buyer_pb2_grpc.BuyerMasterStub(channel)
-#         response = await stub.DisplayCart(buyer_pb2.DisplayCartRequest(buyer_id=buyer_request.get('buyer_id')))
-#     cart_items = response.items
-#     cart_list = []
-#     for item in cart_items:
-#         cart_list.append({'buyer_id':item.buyer_id, 'item_id':item.item_id, 
-#                           'quantity':item.quantity,'name': item.name, 'category': item.category, 
-#                           'condition': item.condition, 'keywords': list(item.keywords), 
-#                           'sale_price': item.sale_price, 'seller_id': item.seller_id})
-
-#     display_cart_resp = {'items': cart_list}
-#     return web.Response(text=json.dumps(display_cart_resp))
+async def provide_feedback_handler(request):
+    buyer_request = json.loads(await request.text())
+    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+        stub = buyer_pb2_grpc.BuyerMasterStub(channel)
+        response = await stub.ProvideFeedback(buyer_pb2.ProvideFeedbackRequest(buyer_id=buyer_request.get('buyer_id'),
+                                                                               item_id=buyer_request.get('item_id'),
+                                                                               feedback=buyer_request.get('feedback')))
+    
+    display_cart_resp = {'buyer_id': response.buyer_id}
+    return web.Response(text=json.dumps(display_cart_resp))
 
 
 async def get_seller_rating_handler(request):
@@ -178,7 +175,7 @@ app.router.add_post('/create_account', create_account_handler)
 app.router.add_post('/login', login_handler)
 app.router.add_post('/logout', logout_handler)
 app.router.add_post('/make_purchase', make_purchase_handler)
-# app.router.add_post('/provide_feedback', provide_feedback_handler)
+app.router.add_post('/provide_feedback', provide_feedback_handler)
 app.router.add_post('/get_seller_rating', get_seller_rating_handler)
 app.router.add_post('/get_buyer_history', get_buyer_history_handler)
 

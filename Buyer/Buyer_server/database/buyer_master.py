@@ -7,7 +7,6 @@ from google.protobuf.timestamp_pb2 import Timestamp
 from sqlalchemy import and_
 
 
-
 class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
     """Implements ItemMaster protobuf service interface."""
     def print_request(self, request, context):
@@ -230,6 +229,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         """
         from models.buyer_cart import BuyerCart
         from models.items import Items
+        from models.sellers import Sellers
 
         # check from SOAP call that credit card payment is success
         # send name, number, exp
@@ -241,13 +241,16 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
             # get item entry for each item in cart
             # check quantity, proceed only if enough quantity available in Item db
             # make sufficient item quantity as purchased
+            # update seller num_items_sold count
             # remove insuffient items from cart
             for cart_item in buyer_cart:
                 item = await Items.query.where(Items.id == cart_item.item_id).gino.first()
+                seller = await Sellers.query.where(Sellers.id == item.seller_id).gino.first()
                 if item and item.quantity >= cart_item.quantity:
                     diff = item.quantity - cart_item.quantity
                     await item.update(quantity=diff).apply()
                     await cart_item.update(checked_out=True).apply()
+                    await seller.update(num_items_sold=seller.num_items_sold+cart_item.quantity).apply()
                 else:
                     await cart_item.delete()
 
@@ -257,22 +260,51 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
             context.set_details('Cart is empty.')
             return buyer_pb2.MakePurchaseResponse()          
 
-    # async def ProvideFeedback(self, request, context):
-    #     """Remove item quantity
-    #     Args:
-    #         request: The request value for the RPC.
-    #         context (grpc.ServicerContext)
-    #     """
-    #     from models.sellers import Sellers
-    #     self.print_request(request, context)
-    #     seller = await Sellers.query.where(Sellers.id == request.seller_id).gino.first()
-    #     if seller:
-    #         rating = seller.feedback[0] - seller.feedback[1]
-    #         return buyer_pb2.GetSellerRatingResponse(rating=rating)
-    #     else:
-    #         context.set_code(grpc.StatusCode.NOT_FOUND)
-    #         context.set_details('Seller rating not found')
-    #         return buyer_pb2.GetSellerRatingResponse()
+    async def ProvideFeedback(self, request, context):
+        """Provide feedback for all checkout items
+        Args:
+            request: The request value for the RPC.
+            context (grpc.ServicerContext)
+        """
+        from models.buyer_cart import BuyerCart, review_type
+        from models.sellers import Sellers
+        from models.items import Items
+        from database import db_customer as db
+        self.print_request(request, context)
+        buyer_cart = await BuyerCart.query.where(and_(BuyerCart.item_id == request.item_id, 
+                                                    BuyerCart.buyer_id == request.buyer_id,
+                                                    BuyerCart.checked_out == True)).gino.first()
+
+        #BuyerCart.seller_review == review_type.NA.name
+        print(buyer_cart)
+        if buyer_cart:
+            item = await Items.query.where(Items.id == request.item_id).gino.first()
+            if item is None:
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+                context.set_details('Feedback update failed - item not available')
+                return buyer_pb2.ProvideFeedbackResponse()
+            seller = await Sellers.query.where(Sellers.id == item.seller_id).gino.first()
+            if seller is None:
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+                context.set_details('Feedback update failed - seller not available')
+                return buyer_pb2.ProvideFeedbackResponse()
+            try:
+                async with db.transaction():
+                    if request.feedback == True:
+                        await buyer_cart.update(seller_review=review_type.UP.name).apply()
+                        await seller.update(feedback=(seller.feedback[0]+1, seller.feedback[1])).apply()
+                    else:
+                        await buyer_cart.update(seller_review=review_type.DOWN.name).apply()
+                        await seller.update(feedback=(seller.feedback[0], seller.feedback[1]+1)).apply()
+            except Exception:
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+                context.set_details('Feedback update failed')
+                return buyer_pb2.ProvideFeedbackResponse()
+            return buyer_pb2.ProvideFeedbackResponse(buyer_id=request.buyer_id)
+        else:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('No item in buyer cart')
+            return buyer_pb2.ProvideFeedbackResponse()
 
     async def GetSellerRating(self, request, context):
         """Get seller rating
