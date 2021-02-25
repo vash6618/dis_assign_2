@@ -11,7 +11,7 @@ async def serve() -> None:
     await database.connect_db()
     item_master_servicer = ItemMasterServicer()
     items_pb2_grpc.add_ItemMasterServicer_to_server(servicer=item_master_servicer, server=server)
-    listen_addr = '127.0.0.1:5001'
+    listen_addr = '0.0.0.0:5001'
     server.add_insecure_port(listen_addr)
     logging.info("Starting server on %s", listen_addr)
     await server.start()
