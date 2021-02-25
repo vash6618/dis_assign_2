@@ -194,7 +194,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
             buyer = await Buyers.create(id=buyer_id, name=request.name, 
                                          user_name=request.user_name, password=request.password)
             if buyer:
-                return buyer_pb2.CreateAccountResponse(seller_id=seller_id)
+                return buyer_pb2.CreateAccountResponse(buyer_id=buyer_id)
             else:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details('Account creation unsuccessful')
