@@ -105,7 +105,6 @@ async def login_handler(request):
         response = await stub.Login(buyer_pb2.LoginRequest(
                                 user_name=buyer_request.get('user_name'),
                                 password=buyer_request.get('password')))
-    
     login_resp = {'buyer_id': response.buyer_id}
     return web.Response(text=json.dumps(login_resp))
 
