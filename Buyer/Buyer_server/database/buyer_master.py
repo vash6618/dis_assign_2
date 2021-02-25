@@ -57,8 +57,8 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
                 search_resp.append(buyer_pb2.Item(
                     name=item[0], category=item[1], id = item[2],
                     condition=item[3], keywords=item[4],
-                    sale_price=item[5], seller_id=item[6],
-                    quantity=item[7]))
+                    sale_price=item[5], quantity=item[6],
+                    seller_id=item[7]))
             return buyer_pb2.SearchItemCartResponse(items=search_resp)
         else:
             context.set_code(grpc.StatusCode.NOT_FOUND)
@@ -163,7 +163,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         self.print_request(request, context)
         buyer_cart = await BuyerCart.query.where(and_(BuyerCart.buyer_id == request.buyer_id,
                                                       BuyerCart.checked_out == False)).gino.all()
-        if buyer_cart:
+        if buyer_cart is not None:
             display_resp = []
             for cart_item in buyer_cart:
                 ts = Timestamp()
@@ -194,7 +194,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
             buyer = await Buyers.create(id=buyer_id, name=request.name, 
                                          user_name=request.user_name, password=request.password)
             if buyer:
-                return buyer_pb2.CreateAccountResponse(seller_id=seller_id)
+                return buyer_pb2.CreateAccountResponse(buyer_id=buyer_id)
             else:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details('Account creation unsuccessful')
@@ -236,7 +236,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
 
         self.print_request(request, context)
         buyer_cart = await BuyerCart.query.where(and_(BuyerCart.buyer_id == request.buyer_id,
-                                                      BuyerCart.checked_out == True)).gino.all()
+                                                      BuyerCart.checked_out == False)).gino.all()
         if buyer_cart:
             # get item entry for each item in cart
             # check quantity, proceed only if enough quantity available in Item db
@@ -248,6 +248,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
                 seller = await Sellers.query.where(Sellers.id == item.seller_id).gino.first()
                 if item and item.quantity >= cart_item.quantity:
                     diff = item.quantity - cart_item.quantity
+                    print("quantities :- ", (item.quantity, cart_item.quantity))
                     await item.update(quantity=diff).apply()
                     await cart_item.update(checked_out=True).apply()
                     await seller.update(num_items_sold=seller.num_items_sold+cart_item.quantity).apply()
@@ -317,7 +318,7 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
         seller = await Sellers.query.where(Sellers.id == request.seller_id).gino.first()
         if seller:
             rating = seller.feedback[0] - seller.feedback[1]
-            return buyer_pb2.GetSellerRatingResponse(rating=rating)
+            return buyer_pb2.GetSellerRatingResponse(seller_rating=rating)
         else:
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details('Seller rating not found')

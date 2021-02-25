@@ -142,7 +142,7 @@ async def get_seller_rating_handler(request):
         stub = buyer_pb2_grpc.BuyerMasterStub(channel)
         response = await stub.GetSellerRating(buyer_pb2.GetSellerRatingRequest(seller_id=buyer_request.get('seller_id')))
     
-    get_seller_rating_resp = {'rating': response.rating}
+    get_seller_rating_resp = {'rating': response.seller_rating}
     return web.Response(text=json.dumps(get_seller_rating_resp))
 
 
