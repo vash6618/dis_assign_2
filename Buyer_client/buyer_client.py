@@ -163,7 +163,10 @@ while(True):
                 print('Unsuccessful in purchasing items')
             else:
                 res_dict = resp_message.json()
-                print('Successfully purchased items')
+                if not res_dict.get('transaction_status'):
+                    print("Unsuccessful in purchasing items. Card payment was rejected.")
+                else:
+                    print('Successfully purchased items')
         if inp == 7:
             item_id = int(input("Enter item id :- "))
             feedback = int(input("Enter feedback(0=DOWN, 1=UP) :- "))
