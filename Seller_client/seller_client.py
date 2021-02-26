@@ -5,7 +5,7 @@ from datetime import datetime
 
   
 # defining the api-endpoint  
-API_ENDPOINT = "http://localhost:8080/"
+API_ENDPOINT = "http://35.217.66.253:8080/"
 
 seller_id = 0
 
