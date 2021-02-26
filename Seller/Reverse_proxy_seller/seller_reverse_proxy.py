@@ -5,6 +5,8 @@ import items_pb2
 import items_pb2_grpc
 from aiohttp import web
 import json
+from config import grpc_server
+grpc_server_port = grpc_server.host_and_port
 
 
 def parse_params(request):
@@ -16,7 +18,7 @@ def parse_params(request):
 async def get_item_handler(request):
     params = parse_params(request)
     id = int(params[0].split('=')[1])
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.GetItem(items_pb2.GetItemRequest(id=id))
     item = response.item
@@ -28,7 +30,7 @@ async def get_item_handler(request):
 
 async def add_item_handler(request):
     item = json.loads(await request.text())
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         item_obj = items_pb2.Item(name=item.get('name'), category=item.get('category'),
                                   condition=item.get('condition'),
@@ -43,7 +45,7 @@ async def add_item_handler(request):
 
 async def change_item_handler(request):
     item = json.loads(await request.text())
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.ChangeItem(items_pb2.ChangeItemRequest(id=item.get('id'),
                                                                      seller_id=item.get('seller_id'),
@@ -55,7 +57,7 @@ async def change_item_handler(request):
 async def display_item_handler(request):
     params = parse_params(request)
     seller_id = int(params[0].split('=')[1])
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.DisplayItem(items_pb2.DisplayItemRequest(seller_id=seller_id))
 
@@ -71,7 +73,7 @@ async def display_item_handler(request):
 
 async def remove_item_handler(request):
     item = json.loads(await request.text())
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.RemoveItem(items_pb2.RemoveItemRequest(id=item.get('id'),
                                                                      seller_id=item.get('seller_id'),
@@ -81,7 +83,7 @@ async def remove_item_handler(request):
 
 async def create_account_handler(request):
     item = json.loads(await request.text())
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.CreateAccount(items_pb2.CreateAccountRequest(name=item.get('name'),
                                                                            user_name=item.get('user_name'),
@@ -93,7 +95,7 @@ async def create_account_handler(request):
 
 async def login_handler(request):
     item = json.loads(await request.text())
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.Login(items_pb2.LoginRequest(user_name=item.get('user_name'),
                                                            password=item.get('password')))
@@ -109,7 +111,7 @@ async def logout_handler(request):
 
 async def get_seller_rating_handler(request):
     item = json.loads(await request.text())
-    async with grpc.aio.insecure_channel('localhost:5001') as channel:
+    async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
         response = await stub.GetSellerRating(items_pb2.GetSellerRatingRequest(seller_id=item.get('seller_id')))
     get_seller_rating_response = {'rating': response.rating}
