@@ -47,7 +47,7 @@ async def change_item_handler(request):
     item = json.loads(await request.text())
     async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
-        response = await stub.ChangeItem(items_pb2.ChangeItemRequest(id=item.get('id'),
+        response = await stub.ChangeItem(items_pb2.ChangeItemRequest(id=item.get('item_id'),
                                                                      seller_id=item.get('seller_id'),
                                                                      sale_price=item.get('sale_price')))
     change_item_resp = {'item_id': response.id}
@@ -55,11 +55,10 @@ async def change_item_handler(request):
 
 
 async def display_item_handler(request):
-    params = parse_params(request)
-    seller_id = int(params[0].split('=')[1])
+    item = json.loads(await request.text())
     async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
-        response = await stub.DisplayItem(items_pb2.DisplayItemRequest(seller_id=seller_id))
+        response = await stub.DisplayItem(items_pb2.DisplayItemRequest(seller_id=item.get('seller_id')))
 
     items = response.items
     item_list = []
@@ -68,14 +67,15 @@ async def display_item_handler(request):
                          'keywords': list(item.keywords), 'sale_price': item.sale_price, 'quantity': item.quantity,
                          'seller_id': item.seller_id})
 
-    return web.Response(text=json.dumps(item_list))
+    display_item_resp = {'items': item_list}
+    return web.Response(text=json.dumps(display_item_resp))
 
 
 async def remove_item_handler(request):
     item = json.loads(await request.text())
     async with grpc.aio.insecure_channel(grpc_server_port) as channel:
         stub = items_pb2_grpc.ItemMasterStub(channel)
-        response = await stub.RemoveItem(items_pb2.RemoveItemRequest(id=item.get('id'),
+        response = await stub.RemoveItem(items_pb2.RemoveItemRequest(id=item.get('item_id'),
                                                                      seller_id=item.get('seller_id'),
                                                                      quantity=item.get('quantity')))
     remove_item_resp = {'item_id': response.id}
@@ -123,7 +123,7 @@ app = web.Application()
 app.router.add_get('/get_item', get_item_handler)
 app.router.add_post('/add_item', add_item_handler)
 app.router.add_post('/change_item', change_item_handler)
-app.router.add_get('/display_item', display_item_handler)
+app.router.add_post('/display_item', display_item_handler)
 app.router.add_post('/remove_item', remove_item_handler)
 app.router.add_post('/create_account', create_account_handler)
 app.router.add_post('/login', login_handler)

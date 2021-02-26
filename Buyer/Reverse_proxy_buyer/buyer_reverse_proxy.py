@@ -25,8 +25,7 @@ async def search_items_handler(request):
     search_resp = []
     for item in resp:
         search_resp.append({'name': item.name, 'category': item.category, 'condition': item.condition,
-                            'item_id': item.id,
-                            'keywords': list(item.keywords), 'sale_price': item.sale_price,
+                            'item_id': item.id, 'keywords': list(item.keywords), 'sale_price': item.sale_price,
                             'quantity': item.quantity, 'seller_id': item.seller_id})
     return web.Response(text=json.dumps(search_resp))
 
@@ -105,6 +104,7 @@ async def login_handler(request):
         response = await stub.Login(buyer_pb2.LoginRequest(
                                 user_name=buyer_request.get('user_name'),
                                 password=buyer_request.get('password')))
+    
     login_resp = {'buyer_id': response.buyer_id}
     return web.Response(text=json.dumps(login_resp))
 
