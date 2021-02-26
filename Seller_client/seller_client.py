@@ -21,7 +21,6 @@ while(True):
         print("1. Create Account")
         print("2. Login")
         print("99. Quit Menu")
-        print("=============")
     else:
         print("Buyer Menu")
         print("1. Add Item")
