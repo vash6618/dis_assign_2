@@ -38,6 +38,7 @@ while(True):
         print(" ")
     print("=============")
     inp = int(input("Enter selection :- "))
+    print("=============")
 
     if inp == 99:
         break
@@ -57,7 +58,7 @@ while(True):
             resp_message = requests.post(url = API_ENDPOINT+'create_account', data = json.dumps(data))
             if resp_message.status_code == 200:
                 res_dict = resp_message.json()
-                buyer_id = res_dict.get('buyer_id')
+                #buyer_id = res_dict.get('buyer_id')
                 print('Successfully created account')
             else:
                 print('Account creation unsuccessful')
@@ -192,7 +193,7 @@ while(True):
                 print('Unsuccessful in getting seller rating')
             else:
                 res_dict = resp_message.json()
-                print('Successfully in getting seller_rating ', res_dict.get('rating'))
+                print('Successful in getting seller_rating ', res_dict.get('rating'))
         if inp == 9:
             curr_time = datetime.now()
             data = {
