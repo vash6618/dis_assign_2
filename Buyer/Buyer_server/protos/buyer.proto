@@ -102,9 +102,9 @@ message LogoutRequest {
 
 message MakePurchaseRequest {
   int64 buyer_id = 1;
-  // credit card - name
-  // number
-  // exp
+  string card_name = 2;
+  string card_number = 3;
+  string card_expiry = 4;
 }
 
 message ProvideFeedbackRequest {

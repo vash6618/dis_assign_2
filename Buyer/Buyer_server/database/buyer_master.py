@@ -233,7 +233,17 @@ class BuyerMasterServicer(buyer_pb2_grpc.BuyerMasterServicer):
 
         # check from SOAP call that credit card payment is success
         # send name, number, exp
+        from zeep import Client
+        from config import Financial_transactions
 
+        client = Client(Financial_transactions.host_and_port_wsdl)
+        result = client.service.pay_using_card(request.card_name, request.card_number, request.card_expiry)
+        result = result[0]
+        print("card result is :- ", result)
+        if result == Financial_transactions.failure:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details('card related transaction was unsuccessful.')
+            return buyer_pb2.MakePurchaseResponse(buyer_id=request.buyer_id, transaction_status=False)
         self.print_request(request, context)
         buyer_cart = await BuyerCart.query.where(and_(BuyerCart.buyer_id == request.buyer_id,
                                                       BuyerCart.checked_out == False)).gino.all()
