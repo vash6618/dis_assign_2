@@ -6,6 +6,6 @@ class DBConstants:
 
 
 class Financial_transactions:
-    host_and_port_wsdl = 'http://35.193.133.88:8002/?wsdl'
+    host_and_port_wsdl = 'http://35.208.176.241:8002/?wsdl'
     success = 'Success'
     failure = 'Failure'
