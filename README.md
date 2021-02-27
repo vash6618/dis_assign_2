@@ -5,13 +5,67 @@
 
 # Product database 
         This particular database is hosted in Cloud SQL. Below are tables stored in the database :-
-        1. Items
+        1) Items
+                                                            Table "public.items"
+            Column   |          Type          | Collation | Nullable | Default | Storage  | Stats target | Description
+         ------------+------------------------+-----------+----------+---------+----------+--------------+-------------
+         name       | character varying(32)  |           | not null |         | extended |              |
+         category   | smallint               |           | not null |         | plain    |              |
+         id         | bigint                 |           | not null |         | plain    |              |
+         condition  | boolean                |           | not null |         | plain    |              |
+         keywords   | character varying(8)[] |           |          |         | extended |              |
+         sale_price | numeric                |           | not null |         | main     |              |
+         quantity   | integer                |           | not null |         | plain    |              |
+         seller_id  | bigint                 |           | not null |         | plain    |              |
+
 
 # Customer database
         This particular database is hosted in Cloud SQL. Below are the tables stored in the database :-
         1) Buyers
         2) Sellers
         3) Buyer Cart
+
+                                                         Table "public.buyers"
+               Column        |         Type          | Collation | Nullable | Default | Storage  | Stats target | Description
+         ---------------------+-----------------------+-----------+----------+---------+----------+--------------+-------------
+         name                | character varying(32) |           | not null |         | extended |              |
+         id                  | bigint                |           | not null |         | plain    |              |
+         num_items_purchased | integer               |           |          | 0       | plain    |              |
+         user_name           | character varying(32) |           | not null |         | extended |              |
+         password            | character varying(32) |           | not null |         | extended |              |
+         Indexes:
+            "buyers_pkey" PRIMARY KEY, btree (id)
+         Access method: heap
+
+
+
+                                                         Table "public.sellers"
+            Column     |         Type          | Collation | Nullable |  Default  | Storage  | Stats target | Description
+         ----------------+-----------------------+-----------+----------+-----------+----------+--------------+-------------
+         name           | character varying(32) |           | not null |           | extended |              |
+         id             | bigint                |           | not null |           | plain    |              |
+         feedback       | seller_feedback       |           |          | ROW(0, 0) | extended |              |
+         num_items_sold | integer               |           |          | 0         | plain    |              |
+         user_name      | character varying(32) |           | not null |           | extended |              |
+         password       | character varying(32) |           | not null |           | extended |              |
+         Indexes:
+            "sellers_pkey" PRIMARY KEY, btree (id)
+            "user_name_seller_index" UNIQUE, btree (user_name)
+         Access method: heap
+
+                                                         Table "public.buyer_cart"
+            Column     |            Type             | Collation | Nullable |      Default      | Storage | Stats target | Description
+         ---------------+-----------------------------+-----------+----------+-------------------+---------+--------------+-------------
+         buyer_id      | bigint                      |           | not null |                   | plain   |              |
+         item_id       | bigint                      |           | not null |                   | plain   |              |
+         quantity      | integer                     |           |          |                   | plain   |              |
+         checked_out   | boolean                     |           | not null |                   | plain   |              |
+         seller_review | review_type                 |           |          | 'NA'::review_type | plain   |              |
+         updated_at    | timestamp without time zone |           | not null | now()             | plain   |              |
+         Indexes:
+            "buyer_cart_pkey" PRIMARY KEY, btree (buyer_id, item_id, checked_out, updated_at)
+         Access method: heap
+
 
 # Search Semantics
         We have an indexing of items per category grouping and have used atleast one keyword matching as 
@@ -33,17 +87,18 @@
 
 
 # Current state of the system
-        1) All the APIs are implemented.
-        2) There are currently five separate server components in the system that run as separate microservices on cloud.
-        3) The two database run on separate instances in Cloud SQL.  
-        4) Seller server can handle multiple sellers simultanously.
-        5) Buyer server can handle multiple buyers simultaneously.
-        6) The database can also process concurrent buyer and seller requests.
-        7) Buyer client is used to emulate the functionality of a buyer.
-        8) Seller client is used to emulate the functionality of a seller.
-        9) Both buyer and seller clients have an interactive UI.
-        10) The search function is performed via indexing of items by category.
-        11) All the server components are asynchronous in nature.
+      1) All the APIs are implemented.
+      2) There are currently five separate lightweight server components in the system that run as separate microservices on cloud.
+         Each of the services are running as containerized applications on the cloud.
+      3) The two database run on separate instances in Cloud SQL.  
+      4) Seller server can handle multiple sellers simultanously.
+      5) Buyer server can handle multiple buyers simultaneously.
+      6) The database can also process concurrent buyer and seller requests.
+      7) Buyer client is used to emulate the functionality of a buyer.
+      8) Seller client is used to emulate the functionality of a seller.
+      9) Both buyer and seller clients have an interactive UI.
+      10) The search function is performed via indexing of items by category.
+      11) All the server components are asynchronous in nature.
 
 
 # Assumptions
@@ -79,8 +134,8 @@
             4) Put an item for sale: 422.679 ms
             5) Change the sale price of an item: 228.51 ms
             6) Remove an item for sale: 288.625 ms
-            7) Display items currently on sale put up by this seller: 215.904 ms, 196.48 ms
-            8) Get seller rating: 211.828
+            7) Display items currently on sale put up by this seller: 215.904 ms
+            8) Get seller rating: 211.828 ms
 
         Buyer APIs
              1) Create Buyer Account: 404.968 ms
@@ -93,7 +148,7 @@
              8) Display the shopping cart: 258.078 ms
              9) Make purchase: 792.865 ms
             10) Provide feedback: 467.861 ms
-            11) Get Seller rating: 
+            11) Get Seller rating: 185.848 ms
             12) Get Purchase history: 267.284 ms
 
 

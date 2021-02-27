@@ -87,7 +87,7 @@ class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
         from models.items import Items
         self.print_request(request, context)
         items = await Items.query.where(Items.seller_id == request.seller_id).gino.all()
-        if items:
+        if items is not None:
             display_resp = []
             for item in items:
                 display_resp.append(items_pb2.DisplayItem(name=item.name, category=item.category, id=item.id,
