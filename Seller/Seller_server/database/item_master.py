@@ -115,7 +115,7 @@ class ItemMasterServicer(items_pb2_grpc.ItemMasterServicer):
             if diff > 0:
                 await item.update(quantity=diff).apply()
             elif diff == 0:
-                await item.delete()
+                await item.update(quantity=0).apply()
             return items_pb2.RemoveItemResponse(id=request.id)
 
         except Exception:
