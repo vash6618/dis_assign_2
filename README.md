@@ -73,28 +73,28 @@
         Client and server are running on same host.
 
         Seller APIs
-            1) Create Seller Account
-            2) Login using Seller Account
-            3) Logout
-            4) Put an item for sale: 0.567 ms
-            5) Change the sale price of an item: 1.107 ms
-            6) Remove an item for sale: 1.030 ms
-            7) Display items currently on sale put up by this seller: 0.510 ms
-            8) Get seller rating
+            1) Create Seller Account: 464.261 ms
+            2) Login using Seller Account: 215.585 ms
+            3) Logout: 145.294 ms
+            4) Put an item for sale: 422.679 ms
+            5) Change the sale price of an item: 228.51 ms
+            6) Remove an item for sale: 288.625 ms
+            7) Display items currently on sale put up by this seller: 215.904 ms, 196.48 ms
+            8) Get seller rating: 211.828
 
         Buyer APIs
-            1) Create Buyer Account
-            2) Login using Buyer Account
-            3) Logout
-            4) Search items for sale: 0.581 ms
-            5) Add item to the shopping cart: 0.560 ms
-            6) Remove item from the shopping cart: 1.503 ms
-            7) Clear the shopping cart: 0.531 ms
-            8) Display the shopping cart: 0.621 ms
-            9) Make purchase
-            10) Provide feedback
-            11) Get Seller rating
-            12) Get Purchase history
+             1) Create Buyer Account: 404.968 ms
+             2) Login using Buyer Account: 221.506 ms
+             3) Logout: 140.996 ms
+             4) Search items for sale: 526.507 ms
+             5) Add item to the shopping cart: 471.546 ms
+             6) Remove item from the shopping cart: 444.972 ms
+             7) Clear the shopping cart: 208.482 ms
+             8) Display the shopping cart: 258.078 ms
+             9) Make purchase: 792.865 ms
+            10) Provide feedback: 467.861 ms
+            11) Get Seller rating: 
+            12) Get Purchase history: 267.284 ms
 
 
 # Extensibility of the current system

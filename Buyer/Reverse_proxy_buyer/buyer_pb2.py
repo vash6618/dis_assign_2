@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0b\x62uyer.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x90\x01\n\x04Item\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x02 \x01(\x05\x12\n\n\x02id\x18\x03 \x01(\x03\x12\x11\n\tcondition\x18\x04 \x01(\x08\x12\x10\n\x08keywords\x18\x05 \x03(\t\x12\x12\n\nsale_price\x18\x06 \x01(\x02\x12\x10\n\x08quantity\x18\x07 \x01(\x05\x12\x11\n\tseller_id\x18\x08 \x01(\x03\"\xe5\x01\n\x12\x44isplayItemsInCart\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x05 \x01(\x05\x12\x11\n\tcondition\x18\x06 \x01(\x08\x12\x10\n\x08keywords\x18\x07 \x03(\t\x12\x12\n\nsale_price\x18\x08 \x01(\x02\x12\x11\n\tseller_id\x18\t \x01(\x03\x12.\n\nupdated_at\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xf9\x01\n\x0fPurchaseHistory\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x05 \x01(\x05\x12\x11\n\tcondition\x18\x06 \x01(\x08\x12\x10\n\x08keywords\x18\x07 \x03(\t\x12\x12\n\nsale_price\x18\x08 \x01(\x02\x12\x11\n\tseller_id\x18\t \x01(\x03\x12\x15\n\rseller_review\x18\n \x01(\t\x12.\n\nupdated_at\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"M\n\x15SearchItemCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x10\n\x08\x63\x61tegory\x18\x02 \x01(\x05\x12\x10\n\x08keywords\x18\x03 \x03(\t\"G\n\x10\x41\x64\x64ToCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\"X\n!RemoveItemFromShoppingCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\"$\n\x10\x43learCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"&\n\x12\x44isplayCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"I\n\x14\x43reateAccountRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tuser_name\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"3\n\x0cLoginRequest\x12\x11\n\tuser_name\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"!\n\rLogoutRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"\'\n\x13MakePurchaseRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"M\n\x16ProvideFeedbackRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08\x66\x65\x65\x64\x62\x61\x63k\x18\x03 \x01(\x08\"+\n\x16GetSellerRatingRequest\x12\x11\n\tseller_id\x18\x01 \x01(\x03\"*\n\x16GetBuyerHistoryRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\".\n\x16SearchItemCartResponse\x12\x14\n\x05items\x18\x01 \x03(\x0b\x32\x05.Item\"%\n\x11\x41\x64\x64ToCartResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"6\n\"RemoveItemFromShoppingCartResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"%\n\x11\x43learCartResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"9\n\x13\x44isplayCartResponse\x12\"\n\x05items\x18\x01 \x03(\x0b\x32\x13.DisplayItemsInCart\")\n\x15\x43reateAccountResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"!\n\rLoginResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"\"\n\x0eLogoutResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"D\n\x14MakePurchaseResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x1a\n\x12transaction_status\x18\x02 \x01(\x08\"+\n\x17ProvideFeedbackResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"0\n\x17GetSellerRatingResponse\x12\x15\n\rseller_rating\x18\x01 \x01(\x03\":\n\x17GetBuyerHistoryResponse\x12\x1f\n\x05items\x18\x01 \x03(\x0b\x32\x10.PurchaseHistory2\x93\x06\n\x0b\x42uyerMaster\x12\x43\n\x0eSearchItemCart\x12\x16.SearchItemCartRequest\x1a\x17.SearchItemCartResponse\"\x00\x12\x34\n\tAddToCart\x12\x11.AddToCartRequest\x1a\x12.AddToCartResponse\"\x00\x12g\n\x1aRemoveItemFromShoppingCart\x12\".RemoveItemFromShoppingCartRequest\x1a#.RemoveItemFromShoppingCartResponse\"\x00\x12\x34\n\tClearCart\x12\x11.ClearCartRequest\x1a\x12.ClearCartResponse\"\x00\x12:\n\x0b\x44isplayCart\x12\x13.DisplayCartRequest\x1a\x14.DisplayCartResponse\"\x00\x12@\n\rCreateAccount\x12\x15.CreateAccountRequest\x1a\x16.CreateAccountResponse\"\x00\x12(\n\x05Login\x12\r.LoginRequest\x1a\x0e.LoginResponse\"\x00\x12+\n\x06Logout\x12\x0e.LogoutRequest\x1a\x0f.LogoutResponse\"\x00\x12=\n\x0cMakePurchase\x12\x14.MakePurchaseRequest\x1a\x15.MakePurchaseResponse\"\x00\x12\x46\n\x0fProvideFeedback\x12\x17.ProvideFeedbackRequest\x1a\x18.ProvideFeedbackResponse\"\x00\x12\x46\n\x0fGetSellerRating\x12\x17.GetSellerRatingRequest\x1a\x18.GetSellerRatingResponse\"\x00\x12\x46\n\x0fGetBuyerHistory\x12\x17.GetBuyerHistoryRequest\x1a\x18.GetBuyerHistoryResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0b\x62uyer.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x90\x01\n\x04Item\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x02 \x01(\x05\x12\n\n\x02id\x18\x03 \x01(\x03\x12\x11\n\tcondition\x18\x04 \x01(\x08\x12\x10\n\x08keywords\x18\x05 \x03(\t\x12\x12\n\nsale_price\x18\x06 \x01(\x02\x12\x10\n\x08quantity\x18\x07 \x01(\x05\x12\x11\n\tseller_id\x18\x08 \x01(\x03\"\xe5\x01\n\x12\x44isplayItemsInCart\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x05 \x01(\x05\x12\x11\n\tcondition\x18\x06 \x01(\x08\x12\x10\n\x08keywords\x18\x07 \x03(\t\x12\x12\n\nsale_price\x18\x08 \x01(\x02\x12\x11\n\tseller_id\x18\t \x01(\x03\x12.\n\nupdated_at\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xf9\x01\n\x0fPurchaseHistory\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x05 \x01(\x05\x12\x11\n\tcondition\x18\x06 \x01(\x08\x12\x10\n\x08keywords\x18\x07 \x03(\t\x12\x12\n\nsale_price\x18\x08 \x01(\x02\x12\x11\n\tseller_id\x18\t \x01(\x03\x12\x15\n\rseller_review\x18\n \x01(\t\x12.\n\nupdated_at\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"M\n\x15SearchItemCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x10\n\x08\x63\x61tegory\x18\x02 \x01(\x05\x12\x10\n\x08keywords\x18\x03 \x03(\t\"G\n\x10\x41\x64\x64ToCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\"X\n!RemoveItemFromShoppingCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08quantity\x18\x03 \x01(\x05\"$\n\x10\x43learCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"&\n\x12\x44isplayCartRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"I\n\x14\x43reateAccountRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tuser_name\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"3\n\x0cLoginRequest\x12\x11\n\tuser_name\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"!\n\rLogoutRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"d\n\x13MakePurchaseRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x11\n\tcard_name\x18\x02 \x01(\t\x12\x13\n\x0b\x63\x61rd_number\x18\x03 \x01(\t\x12\x13\n\x0b\x63\x61rd_expiry\x18\x04 \x01(\t\"M\n\x16ProvideFeedbackRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x0f\n\x07item_id\x18\x02 \x01(\x03\x12\x10\n\x08\x66\x65\x65\x64\x62\x61\x63k\x18\x03 \x01(\x08\"=\n\x16GetSellerRatingRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x11\n\tseller_id\x18\x02 \x01(\x03\"*\n\x16GetBuyerHistoryRequest\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\".\n\x16SearchItemCartResponse\x12\x14\n\x05items\x18\x01 \x03(\x0b\x32\x05.Item\"%\n\x11\x41\x64\x64ToCartResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"6\n\"RemoveItemFromShoppingCartResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"%\n\x11\x43learCartResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"9\n\x13\x44isplayCartResponse\x12\"\n\x05items\x18\x01 \x03(\x0b\x32\x13.DisplayItemsInCart\")\n\x15\x43reateAccountResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"!\n\rLoginResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"\"\n\x0eLogoutResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"D\n\x14MakePurchaseResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\x12\x1a\n\x12transaction_status\x18\x02 \x01(\x08\"+\n\x17ProvideFeedbackResponse\x12\x10\n\x08\x62uyer_id\x18\x01 \x01(\x03\"0\n\x17GetSellerRatingResponse\x12\x15\n\rseller_rating\x18\x01 \x01(\x03\":\n\x17GetBuyerHistoryResponse\x12\x1f\n\x05items\x18\x01 \x03(\x0b\x32\x10.PurchaseHistory2\x93\x06\n\x0b\x42uyerMaster\x12\x43\n\x0eSearchItemCart\x12\x16.SearchItemCartRequest\x1a\x17.SearchItemCartResponse\"\x00\x12\x34\n\tAddToCart\x12\x11.AddToCartRequest\x1a\x12.AddToCartResponse\"\x00\x12g\n\x1aRemoveItemFromShoppingCart\x12\".RemoveItemFromShoppingCartRequest\x1a#.RemoveItemFromShoppingCartResponse\"\x00\x12\x34\n\tClearCart\x12\x11.ClearCartRequest\x1a\x12.ClearCartResponse\"\x00\x12:\n\x0b\x44isplayCart\x12\x13.DisplayCartRequest\x1a\x14.DisplayCartResponse\"\x00\x12@\n\rCreateAccount\x12\x15.CreateAccountRequest\x1a\x16.CreateAccountResponse\"\x00\x12(\n\x05Login\x12\r.LoginRequest\x1a\x0e.LoginResponse\"\x00\x12+\n\x06Logout\x12\x0e.LogoutRequest\x1a\x0f.LogoutResponse\"\x00\x12=\n\x0cMakePurchase\x12\x14.MakePurchaseRequest\x1a\x15.MakePurchaseResponse\"\x00\x12\x46\n\x0fProvideFeedback\x12\x17.ProvideFeedbackRequest\x1a\x18.ProvideFeedbackResponse\"\x00\x12\x46\n\x0fGetSellerRating\x12\x17.GetSellerRatingRequest\x1a\x18.GetSellerRatingResponse\"\x00\x12\x46\n\x0fGetBuyerHistory\x12\x17.GetBuyerHistoryRequest\x1a\x18.GetBuyerHistoryResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -639,6 +639,27 @@ _MAKEPURCHASEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='card_name', full_name='MakePurchaseRequest.card_name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='card_number', full_name='MakePurchaseRequest.card_number', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='card_expiry', full_name='MakePurchaseRequest.card_expiry', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -652,7 +673,7 @@ _MAKEPURCHASEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1162,
-  serialized_end=1201,
+  serialized_end=1262,
 )
 
 
@@ -697,8 +718,8 @@ _PROVIDEFEEDBACKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1203,
-  serialized_end=1280,
+  serialized_start=1264,
+  serialized_end=1341,
 )
 
 
@@ -711,8 +732,15 @@ _GETSELLERRATINGREQUEST = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='seller_id', full_name='GetSellerRatingRequest.seller_id', index=0,
+      name='buyer_id', full_name='GetSellerRatingRequest.buyer_id', index=0,
       number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='seller_id', full_name='GetSellerRatingRequest.seller_id', index=1,
+      number=2, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -729,8 +757,8 @@ _GETSELLERRATINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1282,
-  serialized_end=1325,
+  serialized_start=1343,
+  serialized_end=1404,
 )
 
 
@@ -761,8 +789,8 @@ _GETBUYERHISTORYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1327,
-  serialized_end=1369,
+  serialized_start=1406,
+  serialized_end=1448,
 )
 
 
@@ -793,8 +821,8 @@ _SEARCHITEMCARTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1371,
-  serialized_end=1417,
+  serialized_start=1450,
+  serialized_end=1496,
 )
 
 
@@ -825,8 +853,8 @@ _ADDTOCARTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1419,
-  serialized_end=1456,
+  serialized_start=1498,
+  serialized_end=1535,
 )
 
 
@@ -857,8 +885,8 @@ _REMOVEITEMFROMSHOPPINGCARTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1458,
-  serialized_end=1512,
+  serialized_start=1537,
+  serialized_end=1591,
 )
 
 
@@ -889,8 +917,8 @@ _CLEARCARTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1514,
-  serialized_end=1551,
+  serialized_start=1593,
+  serialized_end=1630,
 )
 
 
@@ -921,8 +949,8 @@ _DISPLAYCARTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1553,
-  serialized_end=1610,
+  serialized_start=1632,
+  serialized_end=1689,
 )
 
 
@@ -953,8 +981,8 @@ _CREATEACCOUNTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1612,
-  serialized_end=1653,
+  serialized_start=1691,
+  serialized_end=1732,
 )
 
 
@@ -985,8 +1013,8 @@ _LOGINRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1655,
-  serialized_end=1688,
+  serialized_start=1734,
+  serialized_end=1767,
 )
 
 
@@ -1017,8 +1045,8 @@ _LOGOUTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1690,
-  serialized_end=1724,
+  serialized_start=1769,
+  serialized_end=1803,
 )
 
 
@@ -1056,8 +1084,8 @@ _MAKEPURCHASERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1726,
-  serialized_end=1794,
+  serialized_start=1805,
+  serialized_end=1873,
 )
 
 
@@ -1088,8 +1116,8 @@ _PROVIDEFEEDBACKRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1796,
-  serialized_end=1839,
+  serialized_start=1875,
+  serialized_end=1918,
 )
 
 
@@ -1120,8 +1148,8 @@ _GETSELLERRATINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1841,
-  serialized_end=1889,
+  serialized_start=1920,
+  serialized_end=1968,
 )
 
 
@@ -1152,8 +1180,8 @@ _GETBUYERHISTORYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1891,
-  serialized_end=1949,
+  serialized_start=1970,
+  serialized_end=2028,
 )
 
 _DISPLAYITEMSINCART.fields_by_name['updated_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -1388,8 +1416,8 @@ _BUYERMASTER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1952,
-  serialized_end=2739,
+  serialized_start=2031,
+  serialized_end=2818,
   methods=[
   _descriptor.MethodDescriptor(
     name='SearchItemCart',

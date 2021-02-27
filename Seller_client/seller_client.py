@@ -46,12 +46,16 @@ while(True):
             name = input("Enter name :- ")
             user_name = input("Enter user_name :- ")
             password = input("Enter password :- ")
+
             data = {
                 'name': name,
                 'user_name': user_name,
                 'password': password
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'create_account', data = json.dumps(data))
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code == 200:
                 res_dict = resp_message.json()
                 #seller_id = res_dict.get('seller_id')
@@ -61,12 +65,15 @@ while(True):
         if inp == 2:
             user_name = input("Enter user_name :- ")
             password = input("Enter password :- ")
+
             data = {
                 'user_name': user_name,
                 'password': password
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'login', data = json.dumps(data))
-            print(resp_message)
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code != 200:
                 print('Unsuccessful log in')
             else:
@@ -83,7 +90,6 @@ while(True):
             sale_price = int(input("Enter item sale price :- "))
             quantity = int(input("Enter item quantity :- "))
 
-            curr_time = datetime.now()
             data = {
                 'name': name,
                 'category': category,
@@ -93,7 +99,10 @@ while(True):
                 'quantity': quantity,
                 'seller_id': seller_id
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'add_item', data = json.dumps(data))
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code != 200:
                 print('Item addition was not successful')
             else:
@@ -103,13 +112,15 @@ while(True):
             item_id = int(input("Enter item id :- "))
             sale_price = int(input("New sale price :- "))
 
-            curr_time = datetime.now()
             data = {
                 'seller_id': seller_id,
                 'item_id': item_id,
                 'sale_price': sale_price
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'change_item', data = json.dumps(data))
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code != 200:
                 print('Unsuccessful item sale price change')
             else:
@@ -119,24 +130,28 @@ while(True):
             item_id = int(input("Enter item_id :- "))
             quantity = int(input("Enter quantity :- "))
 
-            curr_time = datetime.now()
             data = {
                 'seller_id': seller_id,
                 'item_id': item_id,
                 'quantity': quantity
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'remove_item', data = json.dumps(data))
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code != 200:
                 print('Unsuccessful item removal')
             else:
                 res_dict = resp_message.json()
                 print('Successfully removed item')
         if inp == 4:
-            curr_time = datetime.now()
             data = {
                 'seller_id': seller_id
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'display_item', data = json.dumps(data))
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code != 200:
                 print('Unsuccessful in displaying cart')
             else:
@@ -144,11 +159,13 @@ while(True):
                 print('cart contains :- ')
                 pretty_print(res_dict.get('items'))
         if inp == 5:
-            curr_time = datetime.now()
             data = {
                 'seller_id': seller_id
             }
+            curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'get_seller_rating', data = json.dumps(data))
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code != 200:
                 print('Unsuccessful in getting seller rating')
             else:
@@ -157,6 +174,8 @@ while(True):
         if inp == 10:
             curr_time = datetime.now()
             resp_message = requests.post(url = API_ENDPOINT+'logout')
+            later_time = datetime.now()
+            print("latency ", (later_time - curr_time).total_seconds() * 1000, " ms")
             if resp_message.status_code == 200:
                 res_dict = resp_message.json()
                 seller_id = res_dict.get('seller_id')
